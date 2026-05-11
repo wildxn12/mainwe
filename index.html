@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wildan Aesthetic Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* จัดการพื้นฐาน */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* วิดีโอพื้นหลัง */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(20px) brightness(0.4);
+            transform: scale(1.1);
+            z-index: -1;
+        }
+
+        /* กล่องเนื้อหาหลัก - เพิ่มอนิเมชั่นลอยเบาๆ */
+        .container {
+            width: 340px;
+            text-align: center;
+            color: white;
+            position: relative;
+            animation: floating 4s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .profile-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .profile-img:hover {
+            transform: scale(1.15) rotate(5deg);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        h1 {
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        /* ปุ่ม Tabs */
+        .tabs {
+            display: flex;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: 0.4s;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-weight: bold;
+        }
+
+        /* พื้นที่เนื้อหา */
+        .content-wrapper {
+            height: 220px;
+            position: relative;
+        }
+
+        .pane {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(20px);
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .pane.active {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        /* อนิเมชั่นแบบ Stagger สำหรับ info-box */
+        .pane.active .info-box:nth-child(1) { transition-delay: 0.1s; }
+        .pane.active .info-box:nth-child(2) { transition-delay: 0.2s; }
+        .pane.active .info-box:nth-child(3) { transition-delay: 0.3s; }
+
+        .info-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .info-box:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateX(5px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .info-box i {
+            margin-right: 10px;
+            filter: drop-shadow(0 0 5px currentColor);
+        }
+
+        /* โซเชียล */
+        .socials {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+            transition: 0.4s;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .social-icon:hover {
+            background: white;
+            color: black;
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 20px rgba(255,255,255,0.2);
+        }
+
+        /* Loading Screen (เหมือนเดิมแต่ปรับให้นุ่มนวลขึ้น) */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .loader-container {
+            width: 250px;
+            text-align: center;
+        }
+
+        .dino {
+            font-size: 35px;
+            position: absolute;
+            bottom: 45px;
+            left: 0;
+            animation: jump 0.6s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
+        }
+
+        @keyframes jump {
+            from { transform: translateY(0) rotate(0deg); }
+            to { transform: translateY(-15px) rotate(10deg); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: visible;
+            position: relative;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #fff;
+            box-shadow: 0 0 15px #fff, 0 0 5px #fff;
+            border-radius: 10px;
+            transition: width 0.1s linear;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="loader">
+        <div class="loader-container" style="position:relative;">
+            <div class="dino">🕸️</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p style="color: white; margin-top: 20px; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.6;">
+                Initializing <span id="percent">0%</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- แนะนำให้เปลี่ยน src วิดีโอเป็นไฟล์ที่มีอยู่จริงหรือลิงก์ URL -->
+    <video autoplay muted loop playsinline class="video-bg">
+        <source src="From KlickPin CF Recreate these cozy ways to style your holiday treat you’ll want to recreate this weekend with aesthetic touches that photograph beautifully and - Pin-1068760555340972067.mp4" type="video/mp4">
+    </video>
+
+    <div class="container">
+        <div class="profile-wrapper">
+            <img src="https://i.pinimg.com/736x/2b/ba/17/2bba1708d184a6e86ed3198df5fa71ac.jpg" alt="Profile" class="profile-img">
+        </div>
+        <h1>Wildan</h1>
+
+        <div class="tabs">
+            <button id="b1" class="tab-btn active" onclick="showTab('over')">Overview</button>
+            <button id="b2" class="tab-btn" onclick="showTab('about')">About Me</button>
+        </div>
+
+        <div class="content-wrapper">
+            <!-- หน้า Overview -->
+            <div id="over" class="pane active">
+                <div class="info-box">
+                    <span><i class="fa-solid fa-user" style="color: #ff4d94;"></i> Name</span>
+                    <b>Wildan</b>
+                </div>
+                <div class="info-box">
+                    <span><i class="fa-solid fa-calendar" style="color: #00f2ff;"></i> Age</span>
+                    <b>16</b>
+                </div>
+                <div class="info-box">
+                    <span><i class="fas fa-code" style="color: #adff2f;"></i> Work</span>
+                    <b>Coding</b>
+                </div>
+            </div>
+
+            <!-- หน้า About -->
+            <div id="about" class="pane">
+                <div class="info-box" style="text-align:left; line-height: 1.6; font-size: 14px; color: rgba(255,255,255,0.8);">
+                    <p>สวัสดีครับ! ผมเป็นนักพัฒนาวัย 16 ปีที่หลงใหลในการเขียนโค้ดและสร้างสรรค์ผลงาน Aesthetic เว็บนี้สร้างขึ้นเพื่อฝึกฝนทักษะ Front-end ครับ</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="socials">
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+
+    <script>
+        function showTab(name) {
+            // เลือก Elements
+            const overPane = document.getElementById('over');
+            const aboutPane = document.getElementById('about');
+            const b1 = document.getElementById('b1');
+            const b2 = document.getElementById('b2');
+
+            // รีเซ็ตคลาส
+            overPane.classList.remove('active');
+            aboutPane.classList.remove('active');
+            b1.classList.remove('active');
+            b2.classList.remove('active');
+
+            // เปิด Tab ที่เลือก
+            if (name === 'over') {
+                overPane.classList.add('active');
+                b1.classList.add('active');
+            } else {
+                aboutPane.classList.add('active');
+                b2.classList.add('active');
+            }
+        }
+
+        function startLoading() {
+            let width = 0;
+            const progressFill = document.getElementById('progressFill');
+            const dino = document.querySelector('.dino');
+            const percentText = document.getElementById('percent');
+            const loader = document.getElementById('loader');
+
+            const interval = setInterval(() => {
+                if (width >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loader.style.opacity = '0';
+                        setTimeout(() => { 
+                            loader.style.display = 'none'; 
+                        }, 1000);
+                    }, 500);
+                } else {
+                    // สุ่มความเร็วให้ดูสมจริงขึ้น
+                    width += Math.floor(Math.random() * 3) + 1; 
+                    if(width > 100) width = 100;
+                    
+                    progressFill.style.width = width + '%';
+                    percentText.innerText = width + '%';
+                    dino.style.left = `calc(${width}% - 20px)`;
+                }
+            }, 50); 
+        }
+
+        window.addEventListener('load', startLoading);
+    </script>
+</body>
+
+</html>
