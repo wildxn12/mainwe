@@ -1217,6 +1217,74 @@
             transition: all 0.8s ease-in-out;
             /* ให้แสงวิ่งผ่านแบบนุ่มๆ */
         }
+        /* --- [ส่วนแก้ไข Responsive สำหรับหน้าผลงาน] --- */
+        @media (max-width: 600px) {
+            /* ปรับขนาด Container ให้เต็มจอมากขึ้นในมือถือ */
+        .container.expanded {
+        width: 95%;
+        padding: 10px;
+    }
+
+    /* 1. ปรับแต่งการ์ดใบแรก (Rank 1) */
+    .project-card-first {
+        flex-direction: column; /* เปลี่ยนจากแนวนอนเป็นแนวตั้ง */
+        min-height: auto;
+        padding-bottom: 15px;
+    }
+
+    .mct-rank-bar {
+        width: 100%; /* ให้แถบเหลืองเต็มความกว้าง */
+        height: 80px; /* ลดความสูงลง */
+        clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%); /* เปลี่ยนมุมตัดให้สวยในแนวตั้ง */
+        justify-content: center;
+        padding: 0;
+    }
+
+    .mct-rank-bar span {
+        font-size: 40px !important; /* ลดขนาดตัวเลข 1. */
+    }
+
+    .mct-rank-bar img {
+        width: 45px;
+        height: 45px;
+    }
+
+    /* 2. ปรับแต่งพื้นที่เนื้อหาและก้อนวงกลม */
+    .mct-content-area {
+        padding: 15px 10px;
+        align-items: center; /* จัดเนื้อหาตรงกลาง */
+        text-align: center;
+    }
+
+    .custom-grid-8 {
+        justify-content: center; /* จัดกลุ่มวงกลมให้อยู่กลาง */
+        gap: 8px;
+    }
+
+    .gray-circle {
+        width: 40px; /* ลดขนาดวงกลมเล็กน้อย */
+        height: 40px;
+    }
+
+    .ht3-badge-box {
+        font-size: 12px; /* ลดขนาดป้าย HT1 */
+        padding: 3px 8px;
+    }
+
+    /* 3. ปรับแต่งการ์ดมาตรฐาน (อันดับ 2-5) */
+    .project-grid {
+        grid-template-columns: 1fr; /* บังคับเป็น 1 คอลัมน์ */
+        max-height: 450px; /* เพิ่มความสูงพื้นที่ Scroll */
+    }
+    
+    .project-card-standard {
+        padding: 12px;
+    }
+
+    .repo-header {
+        font-size: 13px;
+    }
+}
     </style>
 </head>
 
