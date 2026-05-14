@@ -1297,155 +1297,6 @@
             }
         }
 
-        /* --- Modern Pixel Controls --- */
-        .main-controls-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 10000;
-            pointer-events: none;
-        }
-
-        .top-left-stats,
-        .top-right-controls {
-            position: absolute;
-            top: 25px;
-            pointer-events: auto;
-        }
-
-        .top-left-stats {
-            left: 25px;
-        }
-
-        .top-right-controls {
-            right: 25px;
-        }
-
-        /* ดีไซน์ยอดวิว */
-        .view-counter-modern {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(0, 242, 255, 0.3);
-            padding: 8px 15px;
-            border-radius: 4px;
-            /* ทรงเหลี่ยมแบบพิกเซล */
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #fff;
-            font-family: 'Pixelify Sans', sans-serif;
-            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
-        }
-
-        .view-counter-modern i {
-            color: #00f2ff;
-            text-shadow: 0 0 5px #00f2ff;
-        }
-
-        /* ดีไซน์เครื่องเล่นเพลง */
-        .music-card {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 8px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            backdrop-filter: blur(10px);
-        }
-
-        .music-card button {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            width: 35px;
-            height: 35px;
-            transition: 0.3s;
-        }
-
-        .music-card button:hover {
-            color: #00f2ff;
-        }
-
-        /* แถบสไลด์ */
-        .slider-wrapper {
-            width: 0;
-            overflow: hidden;
-            transition: 0.4s ease;
-        }
-
-        .music-card:hover .slider-wrapper {
-            width: 80px;
-            margin: 0 10px;
-        }
-
-        input[type="range"] {
-            -webkit-appearance: none;
-            background: rgba(255, 255, 255, 0.2);
-            height: 4px;
-            border-radius: 2px;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 12px;
-            height: 12px;
-            background: #00f2ff;
-            border-radius: 2px;
-            /* ทรงเหลี่ยม */
-            cursor: pointer;
-            box-shadow: 0 0 8px #00f2ff;
-        }
-
-        /* --- [ปรับขนาดให้เล็กลงและเป็นกระจกฝ้าจางๆ] --- */
-        .view-counter-modern,
-        .music-card {
-            /* ใช้สีขาวจางๆ เพียง 10% และเบลอพื้นหลัง */
-            background: rgba(255, 255, 255, 0.05) !important;
-            backdrop-filter: blur(10px) saturate(160%);
-            -webkit-backdrop-filter: blur(10px) saturate(160%);
-
-            /* ขอบจางลงมาก */
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-
-            /* ลดขนาด Padding เพื่อให้ปุ่มเล็กลง */
-            padding: 6px 12px;
-            border-radius: 8px;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        /* ปรับขนาดไอคอนและตัวเลขให้เล็กลง */
-        .view-counter-modern i,
-        .music-card button {
-            font-size: 13px !important;
-        }
-
-        #visit-count {
-            font-size: 12px;
-            font-family: 'Pixelify Sans', sans-serif;
-        }
-
-        /* ปรับขนาด Slider ให้บางและสั้นลง */
-        .music-card:hover .slider-wrapper {
-            width: 60px;
-            /* ลดความยาวแถบสไลด์ */
-        }
-
-        input[type="range"] {
-            height: 3px;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            width: 10px;
-            height: 10px;
-        }
-
         /* --- [Responsive สำหรับมือถือโดยเฉพาะ] --- */
         @media (max-width: 600px) {
 
@@ -1462,13 +1313,6 @@
             .top-right-controls {
                 right: 15px;
             }
-
-            /* ย่อขนาดลงอีก 20% สำหรับจอเล็ก */
-            .view-counter-modern,
-            .music-card {
-                transform: scale(0.85);
-                transform-origin: top;
-            }
         }
     </style>
 </head>
@@ -1477,20 +1321,6 @@
     <audio id="bgMusic" loop>
         <source src="C418 - Mice on Venus - Minecraft Volume Alpha.mp3" type="audio/mpeg">
     </audio>
-
-    <div class="main-controls-wrapper">
-        <div class="top-right-controls">
-            <div class="music-card">
-                <button onclick="toggleMute()" id="muteBtn"><i class="fa-solid fa-volume-high"></i></button>
-                <div class="slider-wrapper">
-                    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5"
-                        oninput="updateVolume(this.value)">
-                </div>
-                <button onclick="toggleMusic()" id="playBtn" class="play-pulse"><i
-                        class="fa-solid fa-play"></i></button>
-            </div>
-        </div>
-    </div>
     <div id="loader">
         <div style="width: 250px; position: relative; text-align: center;">
             <div class="dino">♥</div>
@@ -1826,49 +1656,6 @@
                     edu.classList.add('active');
                     edu.classList.remove('enter-top');
                 }, 50);
-            }
-            // --- ระบบยอดเข้าชมจริง ---
-            function updateVisitCount() {
-                // ใช้ API ฟรีในการนับ (เปลี่ยน 'xpop1_portfolio' เป็นชื่อโปรเจกต์ของคุณ)
-                fetch('https://api.countapi.xyz/hit/xpop1_portfolio/visits')
-                    .then(res => res.json())
-                    .then(res => {
-                        document.getElementById('visit-count').innerText = res.value.toLocaleString();
-                    })
-                    .catch(() => {
-                        // กรณี API มีปัญหา ให้แสดงเลขสมมติที่ดูเนียนๆ
-                        document.getElementById('visit-count').innerText = "1,024";
-                    });
-            }
-            updateVisitCount();
-
-            // --- ระบบควบคุมเพลง ---
-            const audio = document.getElementById('bgMusic');
-            const playBtn = document.getElementById('playBtn');
-
-            function toggleMusic() {
-                if (audio.paused) {
-                    audio.play();
-                    playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-                } else {
-                    audio.pause();
-                    playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-                }
-            }
-
-            function updateVolume(val) {
-                audio.volume = val;
-                const muteBtn = document.getElementById('muteBtn');
-                muteBtn.innerHTML = val == 0 ?
-                    '<i class="fa-solid fa-volume-xmark" style="color:#ff4d94"></i>' :
-                    '<i class="fa-solid fa-volume-high"></i>';
-            }
-
-            function toggleMute() {
-                audio.muted = !audio.muted;
-                document.getElementById('muteBtn').innerHTML = audio.muted ?
-                    '<i class="fa-solid fa-volume-xmark" style="color:#ff4d94"></i>' :
-                    '<i class="fa-solid fa-volume-high"></i>';
             }
         </script>
 </body>
