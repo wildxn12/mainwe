@@ -376,12 +376,36 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
+            /* เปลี่ยนจาก background: #000; เป็นการใช้ backdrop-filter */
+            background: rgba(0, 0, 0, 0.125);
+            /* เพิ่มความมืดทับวิดีโอเล็กน้อยเพื่อให้ตัวหนังสือชัด */
+            backdrop-filter: blur(25px);
+            /* ทำให้วิดีโอข้างหลังเบลอ */
+            -webkit-backdrop-filter: blur(25px);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            transition: opacity 1s;
+            transition: opacity 1s, visibility 1s;
+        }
+
+        #loader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        #percent {
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                opacity: 0.5;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .dino {
@@ -415,6 +439,8 @@
             background: #fff;
             box-shadow: 0 0 15px #fff;
             border-radius: 10px;
+            /* เพิ่มบรรทัดนี้เพื่อให้เส้นโหลดวิ่งสมูท */
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* การจัดวางหน้า Project ใหม่ */
@@ -1314,32 +1340,313 @@
                 right: 15px;
             }
         }
+
+        /* Container หลักสำหรับจัดตำแหน่ง */
+        .music-wrapper {
+            position: fixed;
+            z-index: 1000;
+            top: 20px;
+            right: 20px;
+            /* ในคอมอยู่ขวาบน */
+            transition: all 0.3s ease;
+        }
+
+        /* ตัว Card พื้นฐาน (แบบไอคอนรูปแรก) */
+        .music-card {
+            background: rgba(255, 255, 255, 0.008);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            /* ทรงมนยาว */
+            padding: 10px;
+            width: 45px;
+            /* กว้างแค่วงกลมไอคอน */
+            height: 20px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .music-icon-only {
+            min-width: 25px;
+            text-align: center;
+            color: #fff;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+
+        /* ซ่อนเนื้อหาข้างในไว้ก่อน */
+        .music-content {
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            white-space: nowrap;
+            transition: opacity 0.3s ease;
+            margin-left: 15px;
+            padding-right: 15px;
+        }
+
+        /* --- ตอน Hover (รูปสอง) --- */
+        .music-card:hover {
+            width: 280px;
+            /* ขยายความกว้างออก */
+            height: 60px;
+        }
+
+        .music-card:hover .music-content {
+            opacity: 1;
+        }
+
+        /* รายละเอียดเพลง */
+        .song-info {
+            margin-right: 15px;
+        }
+
+        .song-name {
+            font-size: 12px;
+            color: #fff;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .artist-name {
+            font-size: 10px;
+            color: #aaa;
+            margin: 0;
+        }
+
+        /* ปุ่มควบคุม */
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .player-controls button {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        #volumeSlider {
+            width: 60px;
+            height: 3px;
+            accent-color: #fff;
+        }
+
+        /* --- ส่วนปรับแต่งขนาดเครื่องเล่นเพลง (Mobile) --- */
+        @media (max-width: 768px) {
+            .music-wrapper {
+                right: 50% !important;
+                transform: translateX(50%) !important;
+                top: 10px !important;
+                /* ระยะห่างจากขอบบน */
+            }
+
+            .music-card {
+                /* --- [จุดที่ 1: ปรับความสูง/กว้าง ตรงนี้] --- */
+                width: 48px !important;
+                /* ความกว้างตอนหด */
+                height: 32px !important;
+                /* ความสูงตอนหด */
+
+                display: flex !important;
+                justify-content: center !important;
+                /* จัดกลางแนวนอน */
+                align-items: center !important;
+                /* จัดกลางแนวตั้ง */
+
+                border-radius: 8px !important;
+                /* ความโค้งมน */
+                background: rgba(255, 255, 255, 0.07) !important;
+                padding: 0 !important;
+                overflow: hidden;
+                transition: all 0.2s ease;
+            }
+
+            /* ไอคอนโน้ตเพลง */
+            .music-icon-only {
+                margin: 0 !important;
+                padding: 0 !important;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                /* --- [จุดที่ 2: ปรับขนาดไอคอนตรงนี้] --- */
+                font-size: 14px !important;
+                min-width: unset !important;
+                /* ล้างค่าเก่าที่ทำให้โลโก้เบี้ยว */
+            }
+
+            /* ตอนกดขยายในมือถือ */
+            .music-card:active,
+            .music-card:focus {
+                /* --- [จุดที่ 3: ปรับขนาดตอนขยายตรงนี้] --- */
+                width: 300px !important;
+                height: 100px !important;
+                /* ควรเท่ากับความสูงตอนหดเพื่อให้ดูเนียน */
+            }
+
+            /* ซ่อนเนื้อหาตอนที่ยังไม่ได้กด */
+            .music-content {
+                display: none;
+            }
+
+            /* แสดงเนื้อหาตอนกด */
+            .music-card:active .music-content,
+            .music-card:focus .music-content {
+                display: flex !important;
+                align-items: center;
+                margin-left: 10px;
+            }
+        }
+
+        /* คอนเทนเนอร์หลักของ Music Card */
+        .music-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* เอฟเฟกต์ตอน Hover ให้การ์ดดูลอยขึ้นและเรืองแสง */
+        .music-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* เพิ่ม Music Visualizer (แถบเสียงดุ๊กดิ๊ก) */
+        .visualizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 20px;
+            margin-top: 10px;
+        }
+
+        .bar {
+            width: 4px;
+            background: #fff;
+            border-radius: 2px;
+            animation: bounce 0.5s ease-in-out infinite alternate;
+            opacity: 0.7;
+        }
+
+        /* สุ่มความสูงและดีเลย์ให้แถบเสียงดูเหมือนจริง */
+        .bar:nth-child(1) {
+            height: 40%;
+            animation-delay: 0.1s;
+        }
+
+        .bar:nth-child(2) {
+            height: 100%;
+            animation-delay: 0.3s;
+        }
+
+        .bar:nth-child(3) {
+            height: 60%;
+            animation-delay: 0.2s;
+        }
+
+        .bar:nth-child(4) {
+            height: 80%;
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            from {
+                transform: scaleY(0.5);
+            }
+
+            to {
+                transform: scaleY(1.2);
+            }
+        }
+
+        /* ปุ่ม Play ที่หมุนเบาๆ เวลาเอาเมาส์วาง */
+        #playBtn:hover i {
+            transform: scale(1.2);
+            color: #ffd700;
+            /* เปลี่ยนเป็นสีเหลืองทองเวลา hover */
+        }
+
+        /* หมุนแผ่นเสียง (ถ้าคุณมีรูปปกวงกลม) */
+        .music-info img {
+            border-radius: 50%;
+            animation: rotate 8s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .playing .music-info img {
+            animation-play-state: running;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
 <body>
-    <audio id="bgMusic" loop>
-        <source src="C418 - Mice on Venus - Minecraft Volume Alpha.mp3" type="audio/mpeg">
-    </audio>
-    <div id="loader">
-        <div style="width: 250px; position: relative; text-align: center;">
-            <div class="dino">♥</div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <p style="color: white; margin-top: 20px; font-size: 12px; letter-spacing: 3px;">LOADING... <span
-                    id="percent">0%</span></p>
-        </div>
-    </div>
-
     <video autoplay muted loop playsinline class="video-bg">
         <source
             src="From KlickPin CF Recreate these cozy ways to style your holiday treat you’ll want to recreate this weekend with aesthetic touches that photograph beautifully and - Pin-1068760555340972067.mp4"
             type="video/mp4">
     </video>
 
-    <div class="container">
+    <div id="loader">
+        <div style="width: 250px; position: relative; text-align: center;">
+            <div class="dino"></div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p
+                style="color: white; margin-top: 20px; font-size: 12px; letter-spacing: 3px; font-family: 'Pixelify Sans';">
+                LOADING... <span id="percent">0%</span></p>
+        </div>
+    </div>
+    <audio id="bgMusic" loop>
+        <source src="Nasheed Allahu Yalamu  by Muhammad Al Muqit.mp3" type="audio/mpeg">
+    </audio>
+    <div class="music-wrapper">
+        <div class="music-card" tabindex="0">
+            <div class="music-icon-only">
+                <i class="fa-solid fa-music"></i>
+            </div>
 
+            <div class="music-content">
+                <div class="song-info">
+                    <p class="song-name">Mice on Venus</p>
+                    <div class="music-player" id="musicCard">
+                        <div class="song-info">
+                            <div class="song-name">Now Playing</div>
+                            <div class="visualizer" id="visualizer">
+                                <div class="bar" style="height: 12px;"></div>
+                                <div class="bar" style="height: 18px;"></div>
+                                <div class="bar" style="height: 10px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="player-controls">
+                    <button onclick="toggleMusic()" id="playBtn"><i class="fa-solid fa-play"></i></button>
+                    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5"
+                        oninput="updateVolume(this.value)">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
         <div id="main-page" class="page active">
             <div class="profile-wrapper">
                 <img src="https://i.pinimg.com/736x/2b/ba/17/2bba1708d184a6e86ed3198df5fa71ac.jpg" class="profile-img">
@@ -1435,8 +1742,7 @@
                 <div class="project-card-first">
                     <div class="mct-rank-bar">
                         <span style="color: #ffffff; font-weight: 900; font-size: 70px; font-style: italic;">1.</span>
-                        <img src="https://media.discordapp.net/attachments/1485632423411716148/1503646134432825476/model.png?ex=6a041b16&is=6a02c996&hm=dfe3a3ef84d9d9af6a929e29366bad6b6acd3ba8bc605fb873fd949d0d6403e6&=&format=webp&quality=lossless&width=394&height=779"
-                            alt="Skin"
+                        <img src="Gemini_Generated_Image_2z3fko2z3fko2z3f__1_-removebg-preview.png" alt="Skin"
                             style="width:100px; height:100px; object-fit:contain; image-rendering:pixelated;">
                     </div>
 
@@ -1569,23 +1875,45 @@
                 setTimeout(() => { main.classList.add('active'); main.classList.remove('enter-top'); }, 50);
             }
 
+            // --- วางทับส่วน window.addEventListener('load', ...) เดิม ---
             window.addEventListener('load', () => {
-                let width = 0;
+                let currentPercent = 0;
+                const targetPercent = 100;
+                const duration = 2500; // ตั้งเวลาโหลด 2.5 วินาที (ปรับเพิ่ม/ลดได้ตามชอบ)
+                const intervalTime = 20;
+
+                // คำนวณการเพิ่มค่าให้คงที่เพื่อให้ดูสมูท
+                const increment = targetPercent / (duration / intervalTime);
+
                 const interval = setInterval(() => {
-                    if (width >= 100) {
+                    currentPercent += increment;
+
+                    if (currentPercent >= targetPercent) {
+                        currentPercent = targetPercent;
                         clearInterval(interval);
+
+                        // เมื่อครบ 100% ให้รอแป๊บหนึ่งแล้วค่อยจางหาย
                         setTimeout(() => {
-                            document.getElementById('loader').style.opacity = '0';
-                            setTimeout(() => document.getElementById('loader').style.display = 'none', 1000);
+                            const loader = document.getElementById('loader');
+                            loader.style.opacity = '0';
+                            setTimeout(() => {
+                                loader.style.display = 'none';
+                            }, 1000);
                         }, 500);
-                    } else {
-                        width += Math.floor(Math.random() * 5) + 1;
-                        if (width > 100) width = 100;
-                        document.getElementById('progressFill').style.width = width + '%';
-                        document.getElementById('percent').innerText = width + '%';
-                        document.querySelector('.dino').style.left = `calc(${width}% - 20px)`;
                     }
-                }, 50);
+
+                    // อัปเดตตัวเลขและเส้นโหลด
+                    const displayPercent = Math.floor(currentPercent);
+                    document.getElementById('progressFill').style.width = displayPercent + '%';
+                    document.getElementById('percent').innerText = displayPercent + '%';
+
+                    // ให้หัวใจ (Dino) วิ่งตามเส้นโหลด (สมูทตาม CSS transition)
+                    const dino = document.querySelector('.dino');
+                    if (dino) {
+                        dino.style.left = `calc(${displayPercent}% - 20px)`;
+                    }
+
+                }, intervalTime);
             });
             function goToProject() {
                 const edu = document.getElementById('edu-page');
@@ -1657,6 +1985,44 @@
                     edu.classList.remove('enter-top');
                 }, 50);
             }
+            const audio = document.getElementById('bgMusic');
+
+            function toggleMusic() {
+                const playBtn = document.getElementById('playBtn');
+                const musicCard = document.getElementById('musicCard'); // ตัวแปรใหม่
+
+                if (audio.paused) {
+                    audio.play();
+                    playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                    musicCard.classList.add('playing'); // เพิ่มคลาสเพื่อให้ Visualizer ทำงาน
+                } else {
+                    audio.pause();
+                    playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                    musicCard.classList.remove('playing'); // เอาคลาสออกเพื่อหยุด Visualizer
+                }
+            }
+
+            function updateVolume(val) {
+                audio.volume = val;
+            }
+
+            function toggleMute() {
+                audio.muted = !audio.muted;
+                const muteBtn = document.getElementById('muteBtn');
+                muteBtn.innerHTML = audio.muted ?
+                    '<i class="fa-solid fa-volume-xmark"></i>' :
+                    '<i class="fa-solid fa-volume-high"></i>';
+            }
+            // เล่นเพลงทันทีที่มีการคลิกครั้งแรกในหน้าเว็บ
+            document.addEventListener('click', function () {
+                const audio = document.getElementById('bgMusic');
+                if (audio.paused) {
+                    audio.play();
+                    // ถ้ามีปุ่ม playBtn ให้เปลี่ยนไอคอนเป็น pause ด้วย
+                    const playBtn = document.getElementById('playBtn');
+                    if (playBtn) playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                }
+            }, { once: true }); // ให้ทำงานแค่ครั้งเดียวพอ
         </script>
 </body>
 
